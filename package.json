@@ -11,6 +11,7 @@
     "rollbackh": "heroku run knex migrate:rollback -a fitness-anywhere-3",
     "databaseh": "heroku pg:psql -a fitness-anywhere-3",
     "seedh": "heroku run knex seed:run -a fitness-anywhere-3",
+    "resetdb": "npm run rollback && npm run migrate && npm run seed",
     "test": "cross-env NODE_ENV=testing jest --verbose --runInBand",
     "deploy": "git push heroku main"
   },
