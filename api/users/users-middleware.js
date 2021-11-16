@@ -1,5 +1,5 @@
 const db = require("../data/db-config");
-const Users = require("./model");
+const Users = require("./users-model");
 
 const checkUserId = async (req, res, next) => {
   try {
