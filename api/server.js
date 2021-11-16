@@ -24,6 +24,7 @@ server.use(cors())
 server.use('/api/users', UsersRouter)
 server.use('/api/classes', ClassesRouter)
 
+
 server.get('/api/users', async (req, res) => {
   res.json(await getAllUsers())
 })
