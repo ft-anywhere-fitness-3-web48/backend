@@ -1,6 +1,5 @@
 const express = require("express");
 const { checkClassId, validateClasses } = require("./classes-middleware");
-const {} = require("../auth/auth-middleware");
 const router = express.Router();
 const Classes = require("./classes-model");
 
@@ -21,11 +20,32 @@ router.get("/:id", checkClassId, (req, res, next) => {
   }
 });
 
-router.post("/", checkClassId, (req, res, next) => {});
+router.post("/", async (req, res, next) => {
+  try {
+    const newClass = await Classes.addClass(req.body);
+    res.status(201).json(newClass);
+  } catch (error) {
+    next(error);
+  }
+});
 
-router.put("/:id", checkClassId, (req, res, next) => {});
+router.put("/:id", checkClassId, async (req, res, next) => {
+  try {
+    const updatedClass = await Classes.updateClass(req.params.id, req.body);
+    res.status(200).json(updatedClass);
+  } catch (error) {
+    next(error);
+  }
+});
 
-router.delete("/:id", (req, res, next) => {});
+router.delete("/:id", checkClassId, async (req, res, next) => {
+  try {
+    const deletedClass = await Classes.deleteClass(req.params.id);
+    res.status(200).json(deletedClass);
+  } catch (error) {
+    next(error);
+  }
+});
 
 router.use((err, req, res, next) => {
   //eslint-disable-line
