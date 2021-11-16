@@ -1,7 +1,7 @@
 const express = require("express");
-const { checkUserId } = require("./middleware");
+const { checkUserId } = require("./users-middleware");
 const router = express.Router();
-const Users = require("./model");
+const Users = require("./users-model");
 const bcrypt = require("bcryptjs");
 
 router.get("/", async (req, res, next) => {
