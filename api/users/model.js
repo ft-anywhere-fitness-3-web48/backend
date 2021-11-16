@@ -1,11 +1,9 @@
-const db = require("../../data/db-config.js");
+const db = require("../data/db-config");
 
 function find() {
-  return db("users as u").join("roles as r", "u.role_id", "=", "r.role_id", [
-    "u.user_id",
-    "r.role",
-    "u.username",
-  ]);
+  return db("users as u")
+    .join("roles as r", "u.role_id", "=", "r.role_id")
+    .select("u.user_id", "r.role_name", "u.username", "u.password");
 }
 function findBy(filter) {
   return db("users as u")
@@ -13,6 +11,7 @@ function findBy(filter) {
     .select("u.user_id", "u.username", "u.password", "r.role_name")
     .where(filter);
 }
+
 function findById(user_id) {
   return db("users as u")
     .join("roles as r", "u.role_id", "=", "r.role_id")
@@ -20,29 +19,29 @@ function findById(user_id) {
     .where("u.user_id", user_id)
     .first();
 }
-async function add({ username, password, role_name }) {
-  let created_user_id;
-  await db.transaction(async (trx) => {
-    let role_id_to_use;
-    const [role] = await trx("roles").where("role_name", role_name);
-    if (role) {
-      role_id_to_use = role.role_id;
-    } else {
-      const [role_id] = await trx("roles").insert({ role_name: role_name });
-      role_id_to_use = role_id;
-    }
-    const [user_id] = await trx("users").insert({
-      username,
-      password,
-      role_id: role_id_to_use,
-    });
-    created_user_id = user_id;
-  });
-  return findById(created_user_id);
+async function addUser(user) {
+  const [newUserObject] = await db("users").insert(user, [
+    "user_id",
+    "username",
+    "password",
+  ]);
+  return newUserObject;
+}
+
+async function updateUser(user_id, user) {
+  await db("users").update(user).where("user_id", user_id);
+  return findById(user_id);
+}
+
+async function deleteUser(user_id) {
+  const deletedUser = await db("users").where("user_id", user_id).del();
+  return deletedUser;
 }
 module.exports = {
-  add,
+  addUser,
   find,
   findBy,
   findById,
+  deleteUser,
+  updateUser,
 };
