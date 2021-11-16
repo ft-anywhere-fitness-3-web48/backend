@@ -3,6 +3,9 @@ const helmet = require('helmet')
 const cors = require('cors')
 const db = require('./data/db-config')
 
+const UsersRouter = require('./users/router')
+const ClassesRouter = require('./classes/router')
+
 function getAllUsers() { return db('users') }
 
 async function insertUser(user) {
@@ -18,12 +21,20 @@ server.use(express.json())
 server.use(helmet())
 server.use(cors())
 
+server.use('/api/users', UsersRouter)
+server.use('/api/classes', ClassesRouter)
+
+
 server.get('/api/users', async (req, res) => {
   res.json(await getAllUsers())
 })
 
 server.post('/api/users', async (req, res) => {
   res.status(201).json(await insertUser(req.body))
+})
+
+server.use('*', (req, res) => {
+  res.json({ api: 'up' })
 })
 
 module.exports = server
