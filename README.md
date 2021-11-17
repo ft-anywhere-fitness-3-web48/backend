@@ -12,6 +12,10 @@ The object must have:
 1.  username
 2.  password
 3.  role_id
+4.  auth
+
+**_AUTH IS REQUIRED FOR INSTRUCTORS TO BE CREATED, INSTRUCTOR CODE IS A STRING OF 1234_**
+**TEXT INPUT FIELD FOR AUTH SHOULD BE STRING TYPE AND NOT NUMBER**
 
 [POST] /auth/login - Logs the given user in.
 

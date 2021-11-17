@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { JWT_SECRET } = require("../secrets/");
+const { JWT_SECRET, INSTRUCTOR_SECRET } = require("../secrets/");
 const Users = require("../users/users-model");
 
 const checkUsernameExists = async (req, res, next) => {
@@ -16,6 +16,21 @@ const checkUsernameExists = async (req, res, next) => {
   }
 };
 
+const validateRole = (req, res, next) => {
+  const { role_id } = req.body;
+  if (!role_id) {
+    next({ status: 418, message: "Please select a role" });
+  } else if (role_id === 1 && req.body.auth === INSTRUCTOR_SECRET) {
+    req.body.role_id = role_id;
+    next();
+  } else if (role_id === 1 && !req.body.auth) {
+    next({ status: 403, message: "Instructor Code Required" });
+  } else if (role_id === 1 && req.body.auth !== INSTRUCTOR_SECRET) {
+    next({ status: 403, message: "Invalid Instructor Code" });
+  } else {
+    next();
+  }
+};
 // const restricted = (req, res, next) => {
 //   const token = req.headers.authorization;
 //   if (!token) {
@@ -40,4 +55,5 @@ const checkUsernameExists = async (req, res, next) => {
 
 module.exports = {
   checkUsernameExists,
+  validateRole,
 };
