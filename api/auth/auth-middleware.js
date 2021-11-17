@@ -15,6 +15,19 @@ const checkUsernameExists = async (req, res, next) => {
     next(error);
   }
 };
+const checkUsernameUnique = async (req, res, next) => {
+  try {
+    const user = await Users.findBy({ username: req.body.username });
+    if (user) {
+      next({ status: 401, message: "Username Taken" });
+    } else {
+      req.user = user[0];
+      next();
+    }
+  } catch (error) {
+    next(error);
+  }
+};
 
 const validateRole = (req, res, next) => {
   const { role_id } = req.body;
@@ -55,5 +68,6 @@ const validateRole = (req, res, next) => {
 
 module.exports = {
   checkUsernameExists,
+  checkUsernameUnique,
   validateRole,
 };
