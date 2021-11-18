@@ -3,7 +3,7 @@ const { checkClassId, validateClasses } = require("./classes-middleware");
 const router = express.Router();
 const Classes = require("./classes-model");
 
-router.get("/", async (req, res, next) => {
+router.get("/", validateClasses, async (req, res, next) => {
   try {
     const classes = await Classes.find();
     res.status(200).json(classes);
@@ -20,7 +20,7 @@ router.get("/:id", checkClassId, (req, res, next) => {
   }
 });
 
-router.post("/", async (req, res, next) => {
+router.post("/", validateClasses, async (req, res, next) => {
   try {
     const newClass = await Classes.addClass(req.body);
     res.status(201).json(newClass);

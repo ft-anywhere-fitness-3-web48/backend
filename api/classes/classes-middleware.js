@@ -17,7 +17,17 @@ const checkClassId = async (req, res, next) => {
 };
 
 const validateClasses = (req, res, next) => {
-  return db("classes");
+  const { classes } = req.body
+  if ( 
+    classes === undefined || 
+    typeof classes !== 'string' ||
+    !classes.trim()
+    ) {
+      const error = { status: 404, message: 'Invalid Classes'} 
+      next(error)
+    } else {
+      next()
+    }
 };
 
 module.exports = {
