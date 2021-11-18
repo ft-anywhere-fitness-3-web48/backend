@@ -1,5 +1,9 @@
 const express = require("express");
-const { checkClassId, validateClasses } = require("./classes-middleware");
+const {
+  checkClassId,
+  checkClassTypeUnique,
+  addNewClassType,
+} = require("./classes-middleware");
 const router = express.Router();
 const Classes = require("./classes-model");
 
@@ -20,14 +24,47 @@ router.get("/:id", checkClassId, (req, res, next) => {
   }
 });
 
-router.post("/", validateClasses, async (req, res, next) => {
+
+router.post("/", async (req, res, next) => {
   try {
     const newClass = await Classes.addClass(req.body);
     res.status(201).json(newClass);
   } catch (error) {
     next(error);
+
+router.post(
+  "/",
+  checkClassTypeUnique,
+
+  async (req, res, next) => {
+    let {
+      name,
+      start_time,
+      duration,
+      intensity_level,
+      location,
+      registered_attendees,
+      max_size,
+    } = req.body;
+    // const class_type_id = req.classType[0].class_type_id;
+    try {
+      const newClass = await Classes.addClass({
+        name,
+        class_type_id: req.classType[0].class_type_id,
+        start_time,
+        duration,
+        intensity_level,
+        location,
+        registered_attendees,
+        max_size,
+      });
+      res.status(201).json(newClass);
+    } catch (error) {
+      next(error);
+    }
+
   }
-});
+);
 
 router.put("/:id", checkClassId, async (req, res, next) => {
   try {
@@ -48,7 +85,6 @@ router.delete("/:id", checkClassId, async (req, res, next) => {
 });
 
 router.use((err, req, res, next) => {
-  //eslint-disable-line
   res.status(err.status || 500).json({
     customMessage: "something went wrong inside the  class routers",
     message: err.message,

@@ -16,6 +16,7 @@ const checkClassId = async (req, res, next) => {
   return db("classes");
 };
 
+
 const validateClasses = (req, res, next) => {
   const { classes } = req.body
   if ( 
@@ -28,9 +29,50 @@ const validateClasses = (req, res, next) => {
     } else {
       next()
     }
+
+const checkClassTypeUnique = async (req, res, next) => {
+  try {
+    const classType = await db("class_types").where(
+      "class_type_name",
+      req.body.class_type_name
+    );
+    console.log(classType);
+    if (classType.length > 0) {
+      req.classType = classType;
+      next();
+    } else if (!classType.length) {
+      const newClassType = await Classes.addClassType({
+        class_type_name: req.body.class_type_name,
+      });
+      console.log(newClassType);
+      req.classType = newClassType;
+      next();
+    } else {
+      next();
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+const addNewClassType = async (req, res, next) => {
+  next();
+  // try {
+  //   if (!req.classType) {
+  //     const newClassType = await Classes.addClassType(req.body.class_type_name);
+  //     console.log(newClassType);
+  //     req.classType = newClassType;
+  //     next();
+  //   } else {
+  //     next();
+  //   }
+  // } catch (error) {
+  //   next(error);
+  // }
 };
 
 module.exports = {
   checkClassId,
-  validateClasses,
+  checkClassTypeUnique,
+  addNewClassType,
 };

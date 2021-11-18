@@ -20,10 +20,10 @@ function findById(user_id) {
     .first();
 }
 async function addUser(user) {
-  const [newUserObject] = await db("users").insert(user, [
-    "user_id",
+  const [newUserObject] = await db("users as u").insert(user, [
     "username",
     "password",
+    "role_id",
   ]);
   return newUserObject;
 }
