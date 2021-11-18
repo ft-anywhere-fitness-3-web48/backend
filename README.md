@@ -21,7 +21,7 @@ The object must have:
 
 ```
 {
-   "username": "shanegray",
+   "username": "exampleuser",
    "password": "abc123",
    "role_id": 1,
    "auth": "1234"
@@ -32,7 +32,7 @@ Client Register Example:
 
 ```
 {
-   "username": "shanegray1",
+   "username": "exampleuser1",
    "password": "abc123",
    "role_id": 2
 }
@@ -45,7 +45,7 @@ Login Example:
 
 ```
 {
-   "username": "shanegray",
+   "username": "exampleuser",
    "password": "abc123"
 }
 ```
@@ -54,7 +54,7 @@ Response Example:
 
 ```
 {
-   "message": "Welcome, shanegray.",
+   "message": "Welcome, exampleuser.",
    "token": (the encoded token value)
 }
 ```
@@ -85,7 +85,7 @@ Response Example:
 ```
 {
    "user_id": 5,
-   "username": "shanegray",
+   "username": "exampleuser",
    "role_name": "instructor"
 }
 ```
@@ -95,7 +95,7 @@ Edit Request Example:
 
 ```
 {
-   "username": "shanegray93",
+   "username": "exampleuser93",
    "role_id": 1,
    "password": "abc123"
 }
@@ -106,7 +106,7 @@ Edit Response Example:
 ```
 {
    "user_id": 5,
-   "username": "shanegray93",
+   "username": "exampleuser93",
    "role_name": "instructor"
 }
 ```
@@ -175,7 +175,7 @@ The object must have:
 4. duration - how long the class lasts
 5. intensity_level - how hard of a workout (scale of 1-10)
 6. location - where the class takes place
-7. registered_attendees - number of people acurrently registered to attend
+7. registered_attendees - number of people currently registered to attend
 8. max_size - the maximum amount of people the class can have
    Create Request Example:
 
