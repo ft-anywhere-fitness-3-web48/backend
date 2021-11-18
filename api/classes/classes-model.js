@@ -1,19 +1,43 @@
 const db = require("../data/db-config");
 
 function find() {
-  return db("classes as c");
+  return db("classes as c").join(
+    "class_types as ct",
+    "c.class_type_id",
+    "=",
+    "ct.class_type_id"
+  );
 }
-
+function findClassTypes() {
+  return db("class_types");
+}
 function findBy(filter) {
-  return db("classes").where(filter);
+  return db("classes as c")
+    .join("class_types as ct", "c.class_type_id", "=", "ct.class_type_id")
+    .where(filter);
 }
 
 function findById(class_id) {
-  return db("classes").where("class_id", class_id);
+  return db("classes as c")
+    .join("class_types as ct", "c.class_type_id", "=", "ct.class_type_id")
+    .where("class_id", class_id);
 }
 
 async function addClass(newClass) {
-  await db("classes").insert(newClass);
+  return await db("classes").insert(newClass, [
+    "name",
+    "class_type_id",
+    "start_time",
+    "duration",
+    "intensity_level",
+    "location",
+    "registered_attendees",
+    "max_size",
+  ]);
+}
+
+async function addClassType(newType) {
+  return await db("class_types").insert(newType, ["class_type_id"]);
 }
 
 async function updateClass(class_id, classDetails) {
@@ -28,7 +52,9 @@ async function deleteClass(class_id) {
 
 module.exports = {
   addClass,
+  addClassType,
   find,
+  findClassTypes,
   findBy,
   findById,
   deleteClass,
