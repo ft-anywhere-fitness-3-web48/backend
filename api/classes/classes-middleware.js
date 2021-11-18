@@ -16,6 +16,20 @@ const checkClassId = async (req, res, next) => {
   return db("classes");
 };
 
+
+const validateClasses = (req, res, next) => {
+  const { classes } = req.body
+  if ( 
+    classes === undefined || 
+    typeof classes !== 'string' ||
+    !classes.trim()
+    ) {
+      const error = { status: 404, message: 'Invalid Classes'} 
+      next(error)
+    } else {
+      next()
+    }
+
 const checkClassTypeUnique = async (req, res, next) => {
   try {
     const classType = await db("class_types").where(
